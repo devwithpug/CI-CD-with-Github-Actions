@@ -14,11 +14,18 @@ jobs:
     
     steps:
     - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag devwithpug/ci-cd-with-github-actions:$(date +%s)
-    - name: upload to registry
-      uses: elgohr/Publish-Docker-Github-Action@master
+
+    - name: Build and Push the Docker image
+      uses: docker/build-push-action@v1
       with:
-        name: devwithpug/ci-cd-with-github-actions
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+        repository: devwithpug/ci-cd-with-github-actions
+        tags: latest
+
+    - name: Trigger the CodeDeploy in EC2 instance
+      run: aws deploy --region ap-northeast-2 create-deployment --application-name CodeDeploy-application-example --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name CodeDeploy-group-example --github-location repository=devwithpug/CI-CD-with-Github-Actions,commitId=${GITHUB_SHA}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        Default_region_name: ap-northeast-2

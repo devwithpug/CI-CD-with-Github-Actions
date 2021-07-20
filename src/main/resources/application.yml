@@ -2,4 +2,4 @@ server:
   port: 8080
 
 hello:
-  message: HELLO WORLD
+  message: CI/CD TEST

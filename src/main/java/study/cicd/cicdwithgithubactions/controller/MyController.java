@@ -20,7 +20,7 @@ public class MyController {
 
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {
-        return ResponseEntity.status(HttpStatus.OK).body(env.getProperty("hello.message")+ " : " +buildProperties.getVersion());
+        return ResponseEntity.status(HttpStatus.OK).body("[" + env.getProperty("hello.message")+ " : " +buildProperties.getVersion() + "]");
     }
 
 }
