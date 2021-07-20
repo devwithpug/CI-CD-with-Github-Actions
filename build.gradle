@@ -8,6 +8,14 @@ group = 'study.cicd'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+springBoot {
+    buildInfo()
+}
+
+jar {
+    enabled = false
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
